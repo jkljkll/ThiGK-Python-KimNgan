@@ -1,0 +1,55 @@
+﻿Nguyen Thi Kim Ngan _16076411
+1.	Đọc dữ liệu từ nhiều nơi
+Từ local 	from google.colab import files
+		uploaded=files.upload()
+Từ web 		import pandas as pd 
+		pd.read_csv("url đến dataset")
+
+2.	Xử lý missing
+Kiểm tra có missing dữ liệu hay không	
+train_df.isnull().sum()
+
+Tính % dữ liệu missing so với mẫu
+(train_df['Age'].isnull().sum()/train_df.shape[0])*100)
+
+Nếu % missing quá lớn thì bỏ cột dữ liệu đấy
+train_data.drop('Cabin', axis=1, inplace=True)
+
+Nếu % missing nhỏ, với dữ liệu định lượng ta tính mean/median của dữ liệu và thay vào null
+train_df["Age"].mean(skipna=True)
+train_df["Age"].median(skipna=True)
+train_data["Age"].fillna(train_df["Age"].median(skipna=True), inplace=True)
+
+Với dữ liệu định tính ta đếm giá trị xuất hiện nhiều nhất và thay vào null
+train_data["Embarked"].fillna(train_df['Embarked'].value_counts().idxmax(), inplace=True)
+
+3.	Summary dữ liệu dùng các đại lượng thống kê mô tả
+describe()
+count     9.000000	số dòng dữ liệu trong mẫu
+mean     11.622222	giá trị trung bình 
+std      15.124548	độ lệch chuẩn
+min      -5.000000	giá trị nhỏ nhất
+25%       0.100000	phân vị dưới
+50%       8.000000	trung vị
+75%      21.000000	phân vị trên
+max      41.000000	giá trị lớn nhất
+dtype: float64		kiểu dữ liệu
+
+ 
+4.	Trực quan dữ liệu
+Phân tích biến định lượng thường dùng histogram
+ax = train_df["Age"].hist(bins=15, density=True, stacked=True, color='teal', alpha=0.6)
+train_df["Age"].plot(kind='density', color='teal')
+ax.set(xlabel='Age')
+plt.xlim(-10,85)
+plt.show()
+
+Phân tích biến phân loại thường dùng countplot và subplot
+sns.countplot(x='Embarked', data=train_df, palette='Set2')
+plt.show()
+
+Phân tích sự tương quan giữa 2 biến định lượng dùng scatterplot và jointplot
+sns.lmplot(x='Attack', y='Defense', data=df)
+
+Phân tích sự tương quan giữa biến định lượng và biến phân loại dùng boxplot
+sns.boxplot(data=df)
